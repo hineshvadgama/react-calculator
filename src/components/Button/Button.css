@@ -1,0 +1,22 @@
+.button-container {
+    text-align: center;
+    margin: 5px;
+    line-height: 30px;
+    font-size: 30px;
+    padding-top: 30px;
+    padding-bottom: auto;
+    border-radius: 25px;
+    box-shadow: 0 0 12px #e7e7e7;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+.button {
+    color: red;
+}
+
+.wide-button {
+    grid-column: 1 / 3;
+    text-align: left;
+    padding-left: 35px;
+}

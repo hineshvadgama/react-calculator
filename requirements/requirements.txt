@@ -1,0 +1,6 @@
+Use react! It must:
+- I can add, subtract, multiply and divide two numbers.
+- I can clear the input field with a clear button.
+- I can keep chaining mathematical operations together until I hit the equal button, and the calculator will tell me the correct output.
+- Must be able to show loads of numbers in the display
+- Can handle decimal numbers

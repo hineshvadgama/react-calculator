@@ -1,0 +1,13 @@
+.screen-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    height: 100px;
+    text-align: right;
+    font-size: 80px;
+    background-color: #f8f8f8;
+}
+
+.screen-container span {
+    padding-right: 10px;
+}
