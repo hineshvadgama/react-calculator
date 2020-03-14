@@ -40,9 +40,32 @@ class App extends React.Component {
             case '/':
                 this.setState({screenValue: '÷', prevNumber: '÷'});
             break;
-            default: {
+            case '%':
+                // need to find the previous n digits of state expression[]
+                let percentageNumber = [];
+                let tempStateArray = this.state.expression;
+                let i = tempStateArray.length - 1;
+                while (!isNaN(tempStateArray[i]) || tempStateArray[i] === '.') {
+                    percentageNumber.unshift(tempStateArray[i]);
+                    i--;
+                }
+                // if it was a single digit nunmber: add 0.0 behind the digit
+                if (percentageNumber.length === 1) {
+                    tempStateArray.pop();
+                    tempStateArray.push('0','.','0',percentageNumber.toString());
+
+                } else if (percentageNumber.length > 1) {
+                    for (let j = percentageNumber.length; j > 0; j--) {
+                        tempStateArray.pop();
+                    }
+                    // percentageNumber.unshift('0', '.');
+                    tempStateArray.push('0','.',percentageNumber.toString());
+                }
+                this.setState({expression: tempStateArray.toString()});
+            break;
+
+            default:
                 this.setState({screenValue: buttonValue, prevNumber: buttonValue});
-            }
         }
 
         this.setState({expression: this.state.expression.concat(buttonValue)});
@@ -57,6 +80,8 @@ class App extends React.Component {
 
     calculateExpression() {
         // The easy way to do it
+        // Need to find out how a percent symbol is being added to the end of state expression
+        console.log(this.state.expression.toString());
         let answer = eval(this.state.expression.join(''));
         this.setState({screenValue: answer});
     }
