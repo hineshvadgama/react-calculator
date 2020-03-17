@@ -79,13 +79,21 @@ class App extends React.Component {
     }
 
     calculateExpression() {
-        // The easy way to do it
-        // Need to find out how a percent symbol is being added to the end of state expression
-        console.log(this.state.expression.toString());
-        let answer = eval(this.state.expression.join(''));
-        this.setState({screenValue: answer});
+
+        let expression = this.state.expression;
+        
+        // Removes the % symbol from the entire array
+        for (let i = expression.length; i > 0; i--) {
+            if (expression[i] === '%') {
+                expression.splice(i, 1);
+            }
+        }
+
+        let answer = eval(expression.join(''));
+        this.setState({screenValue: answer, expression: answer, prevNumber: answer});
+
     }
- 
+
     render() {
 
         return (
