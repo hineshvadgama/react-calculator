@@ -26,6 +26,7 @@ class App extends React.Component {
         if (this.state.prevNumber === null || !isNaN(this.state.prevNumber) || this.state.prevNumber === '.' ) {
             this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
         }
+
         this.setState({prevNumber: buttonValue});
         this.setState({expression: this.state.expression.concat(buttonValue)});
 
@@ -41,24 +42,28 @@ class App extends React.Component {
                 this.setState({screenValue: '÷', prevNumber: '÷'});
             break;
             case '%':
-                // need to find the previous n digits of state expression[]
+                
+                this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
+
                 let percentageNumber = [];
                 let tempStateArray = this.state.expression;
                 let i = tempStateArray.length - 1;
+                // Finding the length of the last number the user entered and adding it to percentageNumber
                 while (!isNaN(tempStateArray[i]) || tempStateArray[i] === '.') {
                     percentageNumber.unshift(tempStateArray[i]);
                     i--;
                 }
-                // if it was a single digit nunmber: add 0.0 behind the digit
+                // If the last number entered was a single digit nunmber: add 0.0 behind it
                 if (percentageNumber.length === 1) {
                     tempStateArray.pop();
                     tempStateArray.push('0','.','0',percentageNumber.toString());
-
-                } else if (percentageNumber.length > 1) {
+                }
+                // If the last number was a two or more digit number: add 0. behind it
+                else if (percentageNumber.length > 1) {
+                    // Strip tempStateArray of of the last number the user entered (percentageNumber)
                     for (let j = percentageNumber.length; j > 0; j--) {
                         tempStateArray.pop();
                     }
-                    // percentageNumber.unshift('0', '.');
                     tempStateArray.push('0','.',percentageNumber.toString());
                 }
                 this.setState({expression: tempStateArray.toString()});
@@ -82,16 +87,17 @@ class App extends React.Component {
 
         let expression = this.state.expression;
         
-        // Removes the % symbol from the entire array
+        // Removes any % symbol from the entire array
         for (let i = expression.length; i > 0; i--) {
             if (expression[i] === '%') {
                 expression.splice(i, 1);
             }
         }
 
-        let answer = eval(expression.join(''));
+        let stringExpression = expression.toString();
+        stringExpression = stringExpression.replace(/,/g, '');
+        const answer = eval(stringExpression);
         this.setState({screenValue: answer, expression: answer, prevNumber: answer});
-
     }
 
     render() {
