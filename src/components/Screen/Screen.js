@@ -7,11 +7,11 @@ class Screen extends React.Component {
 
         let className = '';
 
-        if (this.props.display.length <= 8) {
+        if (this.props.display.toString().length <= 8) {
             className = 'standard';
-        } else if (this.props.display.length >8 && this.props.display.length <= 12) {
+        } else if (this.props.display.toString().length >8 && this.props.display.toString().length <= 12) {
             className = 'small';
-        } else if (this.props.display.length >12 && this.props.display.length <= 23) {
+        } else if (this.props.display.toString().length >12 && this.props.display.toString().length <= 23) {
             className = 'tiny';
         } else {
             className = 'super-tiny';
