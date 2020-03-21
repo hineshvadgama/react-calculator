@@ -4,10 +4,25 @@
     width: 400px;
     height: 100px;
     text-align: right;
-    font-size: 80px;
     background-color: #f8f8f8;
 }
 
 .screen-container span {
     padding-right: 10px;
+}
+
+.standard {
+    font-size: 80px;
+}
+
+.small {
+    font-size: 55px;
+}
+
+.tiny {
+    font-size: 30px;
+}
+
+.super-tiny {
+    font-size: 20px;
 }

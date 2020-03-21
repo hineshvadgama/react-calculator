@@ -97,6 +97,7 @@ class App extends React.Component {
         let stringExpression = expression.toString();
         stringExpression = stringExpression.replace(/,/g, '');
         const answer = eval(stringExpression);
+        console.log(stringExpression);
         this.setState({screenValue: answer, expression: answer, prevNumber: answer});
     }
 

@@ -3,17 +3,23 @@ import './Screen.css'
 
 class Screen extends React.Component {
 
-    testFunction() {
-        console.log('I am a screen');
-    }
-
     render() {
 
-        this.testFunction();
+        let className = '';
+
+        if (this.props.display.length <= 8) {
+            className = 'standard';
+        } else if (this.props.display.length >8 && this.props.display.length <= 12) {
+            className = 'small';
+        } else if (this.props.display.length >12 && this.props.display.length <= 23) {
+            className = 'tiny';
+        } else {
+            className = 'super-tiny';
+        }
 
         return (
             <div className='screen-container'>
-                <span>{this.props.display}</span>
+                <span className={className} >{this.props.display}</span>
             </div>
         )
     }
