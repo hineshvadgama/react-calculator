@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../Button/Button';
 import Screen from '../Screen/Screen';
 import './App.css';
+import {getNumberBeforeOperation, getNumberAfterOperation} from './AppUtils.js';
 
 class App extends React.Component {
 
@@ -15,6 +16,10 @@ class App extends React.Component {
         }
 
         this.handleNumber = this.handleNumber.bind(this);
+        this.handleOperation = this.handleOperation.bind(this);
+        this.clearExpression = this.clearExpression.bind(this);
+        this.bidmasCalulator = this.bidmasCalulator.bind(this);
+        this.calculateExpression = this.calculateExpression.bind(this);
     }
 
     handleNumber(buttonValue) {
@@ -41,34 +46,6 @@ class App extends React.Component {
             case '/':
                 this.setState({screenValue: '÷', prevNumber: '÷'});
             break;
-            case '%':
-                
-                this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
-
-                let percentageNumber = [];
-                let tempStateArray = this.state.expression;
-                let i = tempStateArray.length - 1;
-                // Finding the length of the last number the user entered and adding it to percentageNumber
-                while (!isNaN(tempStateArray[i]) || tempStateArray[i] === '.') {
-                    percentageNumber.unshift(tempStateArray[i]);
-                    i--;
-                }
-                // If the last number entered was a single digit nunmber: add 0.0 behind it
-                if (percentageNumber.length === 1) {
-                    tempStateArray.pop();
-                    tempStateArray.push('0','.','0',percentageNumber.toString());
-                }
-                // If the last number was a two or more digit number: add 0. behind it
-                else if (percentageNumber.length > 1) {
-                    // Strip tempStateArray of of the last number the user entered (percentageNumber)
-                    for (let j = percentageNumber.length; j > 0; j--) {
-                        tempStateArray.pop();
-                    }
-                    tempStateArray.push('0','.',percentageNumber.toString());
-                }
-                this.setState({expression: tempStateArray.toString()});
-            break;
-
             default:
                 this.setState({screenValue: buttonValue, prevNumber: buttonValue});
         }
@@ -83,22 +60,83 @@ class App extends React.Component {
         this.setState({expression: []});
     }
 
-    calculateExpression() {
+    replaceNumberBeforeAndAfterOperationWithOutputValue(arrayWithNumber, positionOfOperation, lengthOfPreviousNumberToRemove, lengthOfAfterNumberToRemove, outputValue) {
 
-        let expression = this.state.expression;
+        // Remove the number before the operation
+        let firstElementToRemove = positionOfOperation - lengthOfPreviousNumberToRemove;
+        arrayWithNumber.splice(firstElementToRemove, positionOfOperation);
+
+        // Update the position of the operation after removing the number before it
+        positionOfOperation = positionOfOperation - lengthOfPreviousNumberToRemove;
+
+        // Remove the number after the operation
+        let secondElementToRemove = positionOfOperation + lengthOfAfterNumberToRemove;
+        arrayWithNumber.splice(positionOfOperation + 1, secondElementToRemove);
         
-        // Removes any % symbol from the entire array
-        for (let i = expression.length; i > 0; i--) {
-            if (expression[i] === '%') {
-                expression.splice(i, 1);
+        // Replace the operation with the output value
+        arrayWithNumber[positionOfOperation] = outputValue.toString();
+    }
+
+    bidmasCalulator(operation) {
+        let arrayExpression = this.state.expression;
+        let outputValue
+        for (let i = 0; i < arrayExpression.length; i++) {
+            // This tells us that we've hit a point in the array that has our operation
+            if (arrayExpression[i] === operation) {
+                let numberBeforeOperation = getNumberBeforeOperation(i, arrayExpression);
+                let numberAfterOperation = getNumberAfterOperation(i, arrayExpression);
+                switch (operation) {
+                    case '/':
+                        outputValue = numberBeforeOperation / numberAfterOperation;
+                    break;
+                    case '*':
+                        outputValue = numberBeforeOperation * numberAfterOperation;
+                    break;
+                    case '+':
+                        outputValue = numberBeforeOperation + numberAfterOperation;
+                    break;
+                    case '-':
+                        outputValue = numberBeforeOperation - numberAfterOperation;
+                    break;
+                    default:
+                }
+                // Replace the number before the operation, the operation, and the number after the operation with outputValue
+                this.replaceNumberBeforeAndAfterOperationWithOutputValue(
+                    arrayExpression, i, numberBeforeOperation.length, numberAfterOperation.length, outputValue
+                );
             }
         }
+    }
 
-        let stringExpression = expression.toString();
+    calculateExpression() {
+        let stringExpression = this.state.expression.toString();
         stringExpression = stringExpression.replace(/,/g, '');
-        const answer = eval(stringExpression);
-        console.log(stringExpression);
-        this.setState({screenValue: answer, expression: answer, prevNumber: answer});
+
+        const divisionCheck = stringExpression.match(/[/]/g);
+        if (divisionCheck !== null) {
+            //const numberOfDivisions = divisionCheck.length;
+            this.bidmasCalulator('/');
+        }
+
+        const multiplicationCheck = stringExpression.match(/[*]/g);
+        if (multiplicationCheck !== null) {
+            //const numberOfMultiplications = multiplicationCheck.length;
+            this.bidmasCalulator('*');
+        }
+
+        const additionCheck = stringExpression.match(/[+]/g);
+        if (additionCheck !== null) {
+            //const numberOfAdditions = additionCheck.length;
+            this.bidmasCalulator('+');
+        }
+
+        const subtractionCheck = stringExpression.match(/[-]/g);
+        if (subtractionCheck !== null) {
+            //const numberOfSubtractions = subtractionCheck.length;
+            this.bidmasCalulator('-');
+        }
+    
+        this.setState({screenValue: stringExpression});
     }
 
     render() {
@@ -111,7 +149,7 @@ class App extends React.Component {
                         <div className='calculator-grid'> 
                             <Button display='AC' onClick={() => this.clearExpression()} />
                             <Button display='+/-' />
-                            <Button display='%' onClick={() => this.handleOperation('%')} />
+                            <Button display='%' />
                             <Button display='÷' onClick={() => this.handleOperation('/')} />
                             <Button display='7' onClick={() => this.handleNumber('7')} />
                             <Button display='8' onClick={() => this.handleNumber('8')} />
