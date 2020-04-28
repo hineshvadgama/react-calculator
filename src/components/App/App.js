@@ -62,9 +62,10 @@ class App extends React.Component {
 
     replaceNumberBeforeAndAfterOperationWithOutputValue(arrayWithNumber, positionOfOperation, lengthOfPreviousNumberToRemove, lengthOfAfterNumberToRemove, outputValue) {
 
+        console.log(arrayWithNumber);
         // Remove the number before the operation
         let firstElementToRemove = positionOfOperation - lengthOfPreviousNumberToRemove;
-        arrayWithNumber.splice(firstElementToRemove, positionOfOperation);
+        arrayWithNumber.splice(firstElementToRemove, lengthOfPreviousNumberToRemove);
 
         // Update the position of the operation after removing the number before it
         positionOfOperation = positionOfOperation - lengthOfPreviousNumberToRemove;
@@ -72,14 +73,19 @@ class App extends React.Component {
         // Remove the number after the operation
         let secondElementToRemove = positionOfOperation + lengthOfAfterNumberToRemove;
         arrayWithNumber.splice(positionOfOperation + 1, secondElementToRemove);
-        
+
         // Replace the operation with the output value
         arrayWithNumber[positionOfOperation] = outputValue.toString();
+        console.log(arrayWithNumber);
+
+        this.setState({expression: arrayWithNumber});
     }
+
+    // The problem is I'm editing arrayExpression (this.state.expression) in replaceBeforeAndAfter function whilst iterating through it
 
     bidmasCalulator(operation) {
         let arrayExpression = this.state.expression;
-        let outputValue
+        let outputValue;
         for (let i = 0; i < arrayExpression.length; i++) {
             // This tells us that we've hit a point in the array that has our operation
             if (arrayExpression[i] === operation) {
@@ -93,7 +99,7 @@ class App extends React.Component {
                         outputValue = numberBeforeOperation * numberAfterOperation;
                     break;
                     case '+':
-                        outputValue = numberBeforeOperation + numberAfterOperation;
+                        outputValue = +numberBeforeOperation + +numberAfterOperation;
                     break;
                     case '-':
                         outputValue = numberBeforeOperation - numberAfterOperation;
@@ -106,6 +112,7 @@ class App extends React.Component {
                 );
             }
         }
+
     }
 
     calculateExpression() {
@@ -136,7 +143,7 @@ class App extends React.Component {
             this.bidmasCalulator('-');
         }
     
-        this.setState({screenValue: stringExpression});
+        this.setState({screenValue: this.state.expression});
     }
 
     render() {
