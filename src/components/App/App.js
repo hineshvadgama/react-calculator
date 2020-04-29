@@ -61,49 +61,48 @@ class App extends React.Component {
         this.setState({expression: []});
     }
 
-    replaceNumberBeforeAndAfterOperationWithOutputValue(arrayWithNumber, positionOfOperation, lengthOfPreviousNumberToRemove, lengthOfAfterNumberToRemove, outputValue) {
+    calculateExpression() {
+        let stateExpressionAsString = this.state.expression.toString();
+        stateExpressionAsString = stateExpressionAsString.replace(/,/g, '');
 
-        // Remove the number before the operation
-        let firstElementToRemove = positionOfOperation - lengthOfPreviousNumberToRemove;
-        arrayWithNumber.splice(firstElementToRemove, lengthOfPreviousNumberToRemove);
-
-        // Update the position of the operation after removing the number before it
-        positionOfOperation = positionOfOperation - lengthOfPreviousNumberToRemove;
-
-        // Remove the number after the operation
-        let secondElementToRemove = positionOfOperation + lengthOfAfterNumberToRemove;
-        arrayWithNumber.splice(positionOfOperation + 1, secondElementToRemove);
-
-        // Remove the operation from the array
-        arrayWithNumber.splice(positionOfOperation, 1);
-
-        outputValue = outputValue.toString().split("").join(",");
-
-        let outputValueAsArray = outputValue.split(",");
-
-        // Add outputValueAsArray to arrayWithNumber
-        for (let i = 0; i < outputValueAsArray.length; i++) {
-            arrayWithNumber.splice(positionOfOperation, 0, outputValueAsArray[i]);
-            positionOfOperation++;
+        const divisionCheck = stateExpressionAsString.match(/[/]/g);
+        if (divisionCheck !== null) {
+            const numberOfDivisions = divisionCheck.length;
+            this.bidmasCalulator('/', numberOfDivisions);
         }
-        
 
-        this.setState({expression: arrayWithNumber});
+        const multiplicationCheck = stateExpressionAsString.match(/[*]/g);
+        if (multiplicationCheck !== null) {
+            const numberOfMultiplications = multiplicationCheck.length;
+            this.bidmasCalulator('*', numberOfMultiplications);
+        }
+
+        const additionCheck = stateExpressionAsString.match(/[+]/g);
+        if (additionCheck !== null) {
+            const numberOfAdditions = additionCheck.length;
+            this.bidmasCalulator('+', numberOfAdditions);
+        }
+
+        const subtractionCheck = stateExpressionAsString.match(/[-]/g);
+        if (subtractionCheck !== null) {
+            const numberOfSubtractions = subtractionCheck.length;
+            this.bidmasCalulator('-', numberOfSubtractions);
+        }
+    
+        this.setState({screenValue: this.state.expression});
     }
 
-    // The problem WAS no matter how many digits our outputValue is, we add it as a single element in an array
-
     bidmasCalulator(operation, noOfOperations) {
-        let arrayExpression = this.state.expression;
+        let stateExpressionArrayCopy = this.state.expression;
         let outputValue;
 
         for (let j = 0; j < noOfOperations; j++) {
 
-            for (let i = 0; i < arrayExpression.length; i++) {
+            for (let i = 0; i < stateExpressionArrayCopy.length; i++) {
                 // This tells us that we've hit a point in the array that has our operation
-                if (arrayExpression[i] === operation) {
-                    let numberBeforeOperation = getNumberBeforeOperation(i, arrayExpression);
-                    let numberAfterOperation = getNumberAfterOperation(i, arrayExpression);
+                if (stateExpressionArrayCopy[i] === operation) {
+                    let numberBeforeOperation = getNumberBeforeOperation(i, stateExpressionArrayCopy);
+                    let numberAfterOperation = getNumberAfterOperation(i, stateExpressionArrayCopy);
                     switch (operation) {
                         case '/':
                             outputValue = numberBeforeOperation / numberAfterOperation;
@@ -121,7 +120,7 @@ class App extends React.Component {
                     }
                     // Replace the number before the operation, the operation, and the number after the operation with outputValue
                     this.replaceNumberBeforeAndAfterOperationWithOutputValue(
-                        arrayExpression, i, numberBeforeOperation.length, numberAfterOperation.length, outputValue
+                        stateExpressionArrayCopy, i, numberBeforeOperation.length, numberAfterOperation.length, outputValue
                     );
                     break;
                 }
@@ -131,35 +130,34 @@ class App extends React.Component {
 
     }
 
-    calculateExpression() {
-        let stringExpression = this.state.expression.toString();
-        stringExpression = stringExpression.replace(/,/g, '');
+    replaceNumberBeforeAndAfterOperationWithOutputValue(stateExpressionArray, positionOfOperation, lengthOfPreviousNumberToRemove, lengthOfAfterNumberToRemove, outputValue) {
 
-        const divisionCheck = stringExpression.match(/[/]/g);
-        if (divisionCheck !== null) {
-            const numberOfDivisions = divisionCheck.length;
-            this.bidmasCalulator('/', numberOfDivisions);
-        }
+        // Remove the number before the operation
+        let firstElementToRemove = positionOfOperation - lengthOfPreviousNumberToRemove;
+        stateExpressionArray.splice(firstElementToRemove, lengthOfPreviousNumberToRemove);
 
-        const multiplicationCheck = stringExpression.match(/[*]/g);
-        if (multiplicationCheck !== null) {
-            const numberOfMultiplications = multiplicationCheck.length;
-            this.bidmasCalulator('*', numberOfMultiplications);
-        }
+        // Update the position of the operation after removing the number before it
+        positionOfOperation = positionOfOperation - lengthOfPreviousNumberToRemove;
 
-        const additionCheck = stringExpression.match(/[+]/g);
-        if (additionCheck !== null) {
-            const numberOfAdditions = additionCheck.length;
-            this.bidmasCalulator('+', numberOfAdditions);
-        }
+        // Remove the number after the operation
+        let secondElementToRemove = positionOfOperation + lengthOfAfterNumberToRemove;
+        stateExpressionArray.splice(positionOfOperation + 1, secondElementToRemove);
 
-        const subtractionCheck = stringExpression.match(/[-]/g);
-        if (subtractionCheck !== null) {
-            const numberOfSubtractions = subtractionCheck.length;
-            this.bidmasCalulator('-', numberOfSubtractions);
+        // Remove the operation from the array
+        stateExpressionArray.splice(positionOfOperation, 1);
+
+        outputValue = outputValue.toString().split("").join(",");
+
+        let outputValueAsArray = outputValue.split(",");
+
+        // Add outputValueAsArray to arrayWithNumber
+        for (let i = 0; i < outputValueAsArray.length; i++) {
+            stateExpressionArray.splice(positionOfOperation, 0, outputValueAsArray[i]);
+            positionOfOperation++;
         }
-    
-        this.setState({screenValue: this.state.expression});
+        
+
+        this.setState({expression: stateExpressionArray});
     }
 
     render() {
