@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../Button/Button';
 import Screen from '../Screen/Screen';
 import './App.css';
-import { getNumberBeforeOperation, getNumberAfterOperation } from './AppUtils.js';
+import { getNumberBeforeOperation, getNumberAfterOperation, doesCurrentNumberContainDecimal } from './AppUtils.js';
 
 
 class App extends React.Component {
@@ -25,33 +25,47 @@ class App extends React.Component {
 
     handleNumber(buttonValue) {
 
-        if (isNaN(this.state.screenValue) && !isNaN(buttonValue)) {
-            this.setState({screenValue: buttonValue});
+        let currentNumberDecimalStatus;
+
+        if (buttonValue === '.') {
+            currentNumberDecimalStatus = doesCurrentNumberContainDecimal(this.state.expression);
         }
 
-        if (this.state.prevNumber === null || !isNaN(this.state.prevNumber) || this.state.prevNumber === '.' ) {
-            this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
-        }
+        if (!currentNumberDecimalStatus) {
 
-        this.setState({prevNumber: buttonValue});
-        this.setState({expression: this.state.expression.concat(buttonValue)});
+            if (isNaN(this.state.screenValue) && !isNaN(buttonValue)) {
+                this.setState({screenValue: buttonValue});
+            }
+
+            if (this.state.prevNumber === null || !isNaN(this.state.prevNumber) || this.state.prevNumber === '.' ) {
+                this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
+            }
+
+            this.setState({prevNumber: buttonValue});
+            this.setState({expression: this.state.expression.concat(buttonValue)});
+
+        }
 
     }
 
     handleOperation(buttonValue) {
 
-        switch (buttonValue) {
-            case '*':
-                this.setState({screenValue: '×', prevNumber: '*'});
-            break;
-            case '/':
-                this.setState({screenValue: '÷', prevNumber: '÷'});
-            break;
-            default:
-                this.setState({screenValue: buttonValue, prevNumber: buttonValue});
-        }
+        if (!isNaN(this.state.prevNumber) && this.state.prevNumber !== null) {
 
-        this.setState({expression: this.state.expression.concat(buttonValue)});
+            switch (buttonValue) {
+                case '*':
+                    this.setState({screenValue: '×', prevNumber: '*'});
+                break;
+                case '/':
+                    this.setState({screenValue: '÷', prevNumber: '÷'});
+                break;
+                default:
+                    this.setState({screenValue: buttonValue, prevNumber: buttonValue});
+            }
+
+            this.setState({expression: this.state.expression.concat(buttonValue)});
+
+        }
 
     }
 
@@ -99,6 +113,7 @@ class App extends React.Component {
         for (let j = 0; j < noOfOperations; j++) {
 
             for (let i = 0; i < stateExpressionArrayCopy.length; i++) {
+
                 // This tells us that we've hit a point in the array that has our operation
                 if (stateExpressionArrayCopy[i] === operation) {
                     let numberBeforeOperation = getNumberBeforeOperation(i, stateExpressionArrayCopy);
@@ -146,8 +161,8 @@ class App extends React.Component {
         // Remove the operation from the array
         stateExpressionArray.splice(positionOfOperation, 1);
 
+        // Make the output value an array so we can add it back into the array for the main expression
         outputValue = outputValue.toString().split("").join(",");
-
         let outputValueAsArray = outputValue.split(",");
 
         // Add outputValueAsArray to arrayWithNumber

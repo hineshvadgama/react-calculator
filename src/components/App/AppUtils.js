@@ -1,3 +1,26 @@
+export function doesCurrentNumberContainDecimal(expressionArray) {
+    let decimalStatus = false;
+    let positionCounter = expressionArray.length - 1;
+
+    while (expressionArray[positionCounter] !== '/' && expressionArray[positionCounter] !== '*'
+    && expressionArray[positionCounter] !== '+' && expressionArray[positionCounter] !== '-') {
+
+        if (expressionArray[positionCounter] === '.') {
+            decimalStatus = true;
+            break;
+        }
+
+        if (positionCounter > 0) {
+            positionCounter--;
+        } else {
+            break;
+        }
+
+    }
+
+    return decimalStatus;
+}
+
 export function getNumberBeforeOperation(operationPosition, expressionArray) {
     let counter = operationPosition;
     counter = counter - 1;
