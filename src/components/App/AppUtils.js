@@ -40,16 +40,16 @@ export function getNumberBeforeOperation(operationPosition, expressionArray) {
 export function getNumberAfterOperation(operationPosition, expressionArray) {
     let counter = operationPosition;
     counter = counter + 1;
-    let numberBeforeOperation = [];
+    let numberAfterOperation = [];
     
     while (!isNaN(expressionArray[counter]) || expressionArray[counter] === '.') {
-        numberBeforeOperation.push(expressionArray[counter]);
+        numberAfterOperation.push(expressionArray[counter]);
         counter = counter + 1;
     }
-    numberBeforeOperation = numberBeforeOperation.toString();
-    numberBeforeOperation = numberBeforeOperation.replace(/,/g, '');
+    numberAfterOperation = numberAfterOperation.toString();
+    numberAfterOperation = numberAfterOperation.replace(/,/g, '');
 
-    return numberBeforeOperation;
+    return numberAfterOperation;
 }
 
 export function calculatePercentage(num1, num2) {

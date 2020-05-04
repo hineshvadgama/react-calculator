@@ -4,7 +4,6 @@ import Screen from '../Screen/Screen';
 import './App.css';
 import { getNumberBeforeOperation, getNumberAfterOperation, doesCurrentNumberContainDecimal } from './AppUtils.js';
 
-
 class App extends React.Component {
 
     constructor(props) {
@@ -18,6 +17,7 @@ class App extends React.Component {
 
         this.handleNumber = this.handleNumber.bind(this);
         this.handleOperation = this.handleOperation.bind(this);
+        this.handleNegativeSymbol = this.handleNegativeSymbol.bind(this);
         this.clearExpression = this.clearExpression.bind(this);
         this.bidmasCalulator = this.bidmasCalulator.bind(this);
         this.calculateExpression = this.calculateExpression.bind(this);
@@ -69,6 +69,19 @@ class App extends React.Component {
 
     }
 
+    // Need to think long and hard about handling negative values
+    // Especially when you want to do something like 10 - -5 = 
+    handleNegativeSymbol(buttonValue) {
+
+        if (this.state.prevNumber === '÷' || this.state.prevNumber === '*' || this.state.prevNumber === '+' ||
+        this.state.prevNumber === '-' || this.state.prevNumber === null) {
+            
+            this.setState({expression: this.state.expression.concat(buttonValue)});
+            this.setState({screenValue: buttonValue});
+
+        }
+    }
+
     clearExpression() {
         this.setState({screenValue: ''});
         this.setState({prevNumber: null});
@@ -116,8 +129,8 @@ class App extends React.Component {
 
                 // This tells us that we've hit a point in the array that has our operation
                 if (stateExpressionArrayCopy[i] === operation) {
-                    let numberBeforeOperation = getNumberBeforeOperation(i, stateExpressionArrayCopy);
-                    let numberAfterOperation = getNumberAfterOperation(i, stateExpressionArrayCopy);
+                    const numberBeforeOperation = getNumberBeforeOperation(i, stateExpressionArrayCopy);
+                    const numberAfterOperation = getNumberAfterOperation(i, stateExpressionArrayCopy);
                     switch (operation) {
                         case '/':
                             outputValue = numberBeforeOperation / numberAfterOperation;
@@ -184,7 +197,7 @@ class App extends React.Component {
                         <Screen display={this.state.screenValue} />
                         <div className='calculator-grid'> 
                             <Button display='AC' onClick={() => this.clearExpression()} />
-                            <Button display='+/-' />
+                            <Button display='+/-' onClick={() => this.handleNegativeSymbol('-')} />
                             <Button display='%' />
                             <Button display='÷' onClick={() => this.handleOperation('/')} />
                             <Button display='7' onClick={() => this.handleNumber('7')} />
