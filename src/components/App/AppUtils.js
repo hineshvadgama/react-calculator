@@ -50,7 +50,13 @@ export function getNumberBeforeOperation(operationPosition, expressionArray) {
     numberBeforeOperation = numberBeforeOperation.reverse();    
 
     if (negativeStatus === true) {
-        numberBeforeOperation.unshift("-");
+        numberBeforeOperation.unshift('-');
+    }
+
+    // In case the first number in the expression is a negative number
+    // We add a negative symbol in front of the number before returning it
+    if (counter === 0 && expressionArray[counter] === '-') {
+        numberBeforeOperation.unshift('-');
     }
 
     numberBeforeOperation = numberBeforeOperation.toString();

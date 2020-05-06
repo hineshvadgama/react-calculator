@@ -123,9 +123,24 @@ class App extends React.Component {
         let stateExpressionArrayCopy = this.state.expression;
         let outputValue;
 
-        for (let j = 0; j < noOfOperations; j++) {
+        ////////////////////////////////////////////////////////////////////////
+        // In case our first number is a negative number,
+        // we don't want to confuse that for a subtraction symbol
+        let j = 0;
+        let i = 0;
+        let negativeStatus = false;
 
-            for (let i = 0; i < stateExpressionArrayCopy.length; i++) {
+        if (operation === '-' && stateExpressionArrayCopy[0] === '-') {
+            j = 1;
+            i = 1;
+            negativeStatus = true;
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+
+        for (j; j < noOfOperations; j++) {
+
+            for (i; i < stateExpressionArrayCopy.length; i++) {
 
                 // This tells us that we've hit a point in the array that has our operation
                 if (stateExpressionArrayCopy[i] === operation) {
@@ -150,6 +165,13 @@ class App extends React.Component {
                     this.replaceNumberBeforeAndAfterOperationWithOutputValue(
                         stateExpressionArrayCopy, i, numberBeforeOperation.length, numberAfterOperation.length, outputValue
                     );
+                    
+                    if (negativeStatus === true) {
+                        i = 1;
+                    } else {
+                        i = 0;
+                    }
+
                     break;
                 }
             }
