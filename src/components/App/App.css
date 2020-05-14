@@ -20,3 +20,17 @@
     grid-template-columns: 100px 100px 100px 100px;
     grid-template-rows: 100px 100px 100px 100px 100px;
 }
+
+@media only screen and (max-width: 414px) {
+    
+    .calculator {
+        width: 360px;
+        margin-top: 5vh;
+    }
+    
+    .calculator-grid {
+        display: grid;
+        grid-template-columns: 90px 90px 90px 90px;
+        grid-template-rows: 90px 90px 90px 90px 90px;
+    }
+  }

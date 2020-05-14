@@ -21,6 +21,7 @@ class App extends React.Component {
         this.clearExpression = this.clearExpression.bind(this);
         this.bidmasCalulator = this.bidmasCalulator.bind(this);
         this.calculateExpression = this.calculateExpression.bind(this);
+        this.handlePercentage = this.handlePercentage.bind(this);
     }
 
     handleNumber(buttonValue) {
@@ -80,6 +81,44 @@ class App extends React.Component {
             this.setState({screenValue: buttonValue});
 
         }
+    }
+
+    handlePercentage(buttonValue) {
+
+        // This causes a problem
+        // 6*19.2%-3*6
+
+        // We're going to get the current number that the percentage applies to and divide it by 100
+        // We'll then add that to the state expression
+
+        if (!isNaN(this.state.prevNumber)) {
+            
+            this.setState({screenValue: `${this.state.screenValue}${buttonValue}`});
+            
+            let expressionArrayCopy = this.state.expression;
+            let percentageNumber = [];
+            let counter = this.state.expression.length - 1;
+
+            while (!isNaN(expressionArrayCopy[counter])) {
+                percentageNumber.unshift(this.state.expression[counter]);
+                expressionArrayCopy.pop();
+                counter--;
+            }
+
+            let percentageNumberAsString = percentageNumber.toString();
+            percentageNumberAsString = percentageNumberAsString.replace(/,/g, '');
+            percentageNumberAsString = percentageNumberAsString / 100;
+            percentageNumberAsString = percentageNumberAsString.toString().split('').join(',');
+            percentageNumber = percentageNumberAsString.split(',');
+
+            for (let i = 0; i < percentageNumber.length; i++) {
+                expressionArrayCopy.push(percentageNumber[i]);
+            }
+
+            this.setState({expression: expressionArrayCopy});
+
+        }
+
     }
 
     clearExpression() {
@@ -220,7 +259,7 @@ class App extends React.Component {
                         <div className='calculator-grid'> 
                             <Button display='AC' onClick={() => this.clearExpression()} />
                             <Button display='+/-' onClick={() => this.handleNegativeSymbol('-')} />
-                            <Button display='%' />
+                            <Button display='%' onClick={() => this.handlePercentage('%')} />
                             <Button display='÷' onClick={() => this.handleOperation('/')} />
                             <Button display='7' onClick={() => this.handleNumber('7')} />
                             <Button display='8' onClick={() => this.handleNumber('8')} />

@@ -26,3 +26,11 @@
 .super-tiny {
     font-size: 20px;
 }
+
+@media only screen and (max-width: 414px) {
+
+    .screen-container {
+        width: 360px;
+    }
+
+}
