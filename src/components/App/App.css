@@ -24,13 +24,13 @@
 @media only screen and (max-width: 414px) {
     
     .calculator {
-        width: 360px;
+        width: 350px;
         margin-top: 5vh;
     }
     
     .calculator-grid {
         display: grid;
-        grid-template-columns: 90px 90px 90px 90px;
-        grid-template-rows: 90px 90px 90px 90px 90px;
+        grid-template-columns: 87.5px 87.5px 87.5px 87.5px;
+        grid-template-rows: 87.5px 87.5px 87.5px 87.5px 87.5px;
     }
   }

@@ -20,3 +20,11 @@
     text-align: left;
     padding-left: 35px;
 }
+
+@media only screen and (max-width: 414px) {
+
+    .button-container {
+        line-height: 20px;
+    }
+
+}
