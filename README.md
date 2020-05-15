@@ -6,7 +6,7 @@ A simple calculator that has been built using React.
 
 Starting from a simple image of a calculator and a few requirements, I implemented the UI, and added logic to make this funtioning calculator.
 
-Two key thing to note is that it doesn't use JavaScript's `eval` function, and that it also follows the mathematics rule of BIDMAS to solve expressions.
+Two key thing to note is that it doesn't use JavaScript's `eval` function, and that it also follows the Mathematics rule of BIDMAS to solve expressions.
 
 # Screenshots
 
