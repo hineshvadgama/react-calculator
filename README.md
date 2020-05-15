@@ -2,6 +2,8 @@
 
 A simple calculator that has been built using React.
 
+[View the live app here](https://youthful-hypatia-233903.netlify.app/)
+
 # Background
 
 Starting from a simple image of a calculator and a few requirements, I implemented the UI, and added logic to make this funtioning calculator.
