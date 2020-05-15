@@ -10,7 +10,7 @@ Two key thing to note is that it doesn't use JavaScript's `eval` function, and t
 
 # Screenshots
 
-
+![Screenshot of calculator](https://github.com/hineshvadgama/react-calculator/blob/master/img/Screenshot_1.PNG)
 
 # Tech / Framework used
 
