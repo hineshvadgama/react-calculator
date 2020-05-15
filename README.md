@@ -1,6 +1,6 @@
 # React Calculator
 
-A simple calculator that has been built using React.
+A simple calculator that has been built using [React](https://reactjs.org/).
 
 [View the live app here](https://youthful-hypatia-233903.netlify.app/)
 
