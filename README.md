@@ -1,6 +1,6 @@
 # React Calculator
 
-A calculator built using React that avoids using JavaScript's eval function.
+A calculator built using React that avoids using JavaScript's `eval` function.
 
 # Installation
 
