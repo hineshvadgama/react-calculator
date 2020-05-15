@@ -4,7 +4,7 @@ A calculator built using React that avoids using JavaScript's `eval` function.
 
 # Installation
 
-Once inside the repository folder, install the dependencies
+Once inside the repository folder, install any dependencies
 
 `npm install`
 
