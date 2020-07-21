@@ -2,7 +2,7 @@
 
 A simple calculator that has been built using [React](https://reactjs.org/).
 
-[View the live app here](https://youthful-hypatia-233903.netlify.app/)
+[View the live app here](https://react-calculator-94.netlify.app/)
 
 # Background
 
